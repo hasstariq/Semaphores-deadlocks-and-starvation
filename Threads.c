@@ -22,7 +22,7 @@ typedef struct semaphoreInfo {
 } SEMINFO;
 SEMINFO semInfo = {0, 0, 0, 0};
 
-typedef struct thread //represents a single thread, you can add more members if required
+typedef struct thread //represents a single thread
 {
 	char tid[4];//id of the thread as read from file
 	unsigned int startTime;
@@ -32,7 +32,6 @@ typedef struct thread //represents a single thread, you can add more members if 
 	int isOdd;
 } Thread;
 
-//you can add more functions here if required
 int threadsLeft(Thread* threads, int threadCount);
 int threadToStart(Thread* threads, int threadCount);
 void* threadRun(void* t);//the thread function, the code executed by each thread
@@ -47,7 +46,6 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-  //you can add some suitable code anywhere in main() if required
 	Thread* myThreads = NULL;
 	int threadCount = readFile(argv[1],&myThreads);
 
@@ -79,14 +77,14 @@ int main(int argc, char *argv[])
 	}
 
 	startClock();
-	while(threadsLeft(myThreads, threadCount)>0)//put a suitable condition here to run your program
+	while(threadsLeft(myThreads, threadCount)>0)
 	{
-    //you can add some suitable code anywhere in this loop if required
+
 
 		int idx = threadToStart(myThreads, threadCount);
 		while(idx>-1)
 		{
-		   //you can add some suitable code anywhere in this loop if required
+		   
 			if (myThreads[idx].isOdd == 1) {
 				semInfo.evenCounter--;
 			} else {
@@ -117,7 +115,7 @@ void isDeadlock(){
 	}
 }
 
-int readFile(char* fileName, Thread** threads)//do not modify this method
+int readFile(char* fileName, Thread** threads)
 {
 	FILE *in = fopen(fileName, "r");
 	if(!in)
@@ -228,23 +226,23 @@ int threadToStart(Thread* threads, int threadCount)
 	return -1;
 }
 
-void* threadRun(void* t)//implement this function in a suitable way
+void* threadRun(void* t)
 {
 	logStart(((Thread*)t)->tid);
 
 
-	//your synchronization logic will appear here
+	
 	if (((Thread*)t)->isOdd){
 		sem_wait(&semInfo.semEven);
 	} else {
 		sem_wait(&semInfo.semOdd);
 	}
 
-	//critical section starts here
+	
 	printf("[%ld] Thread %s is in its critical section\n",getCurrentTime(), ((Thread*)t)->tid);
-	//critical section ends here
+	
 
-	//your synchronization logic will appear here
+	
 	if (((Thread*)t)->isOdd){
 		sem_post(&semInfo.semOdd);
 	} else {
@@ -262,8 +260,7 @@ void startClock()
 	programClock = time(NULL);
 }
 
-long getCurrentTime()//invoke this method whenever you want check how much time units passed
-//since you invoked startClock()
+long getCurrentTime()
 {
 	time_t now;
 	now = time(NULL);
